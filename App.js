@@ -1,20 +1,50 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, TextInput, ActivityIndicator, Button, Pressable, FlatList } from 'react-native';
+import GoalInput from './Components/GoalInput';
+import GoalList from './Components/GoalList';
 
 export default function App() {
+  const [goal, setGoal] = useState('');
+  const [goalList, setList] = useState([]);
+
+  let inputChangeHandler = (value) => {
+    setGoal(value)
+  }
+  let addGoalHandler = () => {
+    if (goal && !goalList.includes(goal)) {
+      let newList = [...goalList];
+      newList.push(goal);
+      setList(newList)
+      setGoal('')
+    }
+
+  }
+
+  let deleteGoalHandler = (myGoalToDelete)=>{
+    if(myGoalToDelete){
+      setList(currentList=>{
+        return currentList.filter(goals=>goals!==myGoalToDelete)
+      })
+    }
+  }
+
+
   return (
+    <>
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <GoalInput inputChangeHandler={inputChangeHandler} goal={goal} addGoalHandler={addGoalHandler}/>
+      <GoalList goalList={goalList} deleteGoalHandler={deleteGoalHandler}/>   
+
     </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding:10
   },
+
 });
