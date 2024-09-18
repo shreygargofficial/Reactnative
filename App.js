@@ -1,50 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, ActivityIndicator, Button, Pressable, FlatList } from 'react-native';
-import GoalInput from './Components/GoalInput';
-import GoalList from './Components/GoalList';
+import { StyleSheet, Text, View, ScrollView, TextInput, ActivityIndicator, Button, Pressable, FlatList, SafeAreaView, ImageBackground } from 'react-native';
+import Login from './Screen/Login';
+import Main from './Screen/Main';
+
 
 export default function App() {
-  const [goal, setGoal] = useState('');
-  const [goalList, setList] = useState([]);
-
-  let inputChangeHandler = (value) => {
-    setGoal(value)
+  const [mainScreen,setMainScreen] = useState(false)
+  let onScreenChange =()=>{
+    setMainScreen(true)
   }
-  let addGoalHandler = () => {
-    if (goal && !goalList.includes(goal)) {
-      let newList = [...goalList];
-      newList.push(goal);
-      setList(newList)
-      setGoal('')
-    }
-
+  let Screen = <Login onScreenChange={onScreenChange}/>
+  if(mainScreen){
+    Screen = <Main/>
   }
-
-  let deleteGoalHandler = (myGoalToDelete)=>{
-    if(myGoalToDelete){
-      setList(currentList=>{
-        return currentList.filter(goals=>goals!==myGoalToDelete)
-      })
-    }
-  }
-
-
   return (
-    <>
-    <View style={styles.container}>
-      <GoalInput inputChangeHandler={inputChangeHandler} goal={goal} addGoalHandler={addGoalHandler}/>
-      <GoalList goalList={goalList} deleteGoalHandler={deleteGoalHandler}/>   
-
+    <View style={styles.root}>
+      {Screen}
     </View>
-    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding:10
-  },
-
-});
+let styles = StyleSheet.create({
+  root:{
+    flex:1
+  }
+})

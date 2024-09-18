@@ -12,7 +12,9 @@
     "@react-native-community/datetimepicker": "^8.2.0",
     "@react-native-community/slider": "^4.5.3",
     "expo": "~51.0.28",
+    "expo-linear-gradient": "^13.0.2",
     "expo-status-bar": "~1.12.1",
+    "linear-gradient": "^1.0.6",
     "react": "18.2.0",
     "react-native": "0.74.5"
   },
