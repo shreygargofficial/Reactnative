@@ -1,50 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, ActivityIndicator, Button, Pressable, FlatList } from 'react-native';
-import GoalInput from './Components/GoalInput';
-import GoalList from './Components/GoalList';
 
-export default function App() {
-  const [goal, setGoal] = useState('');
-  const [goalList, setList] = useState([]);
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator } from '@react-navigation/native-stack';
+import Category from './screen/Category';
+import Meal from './screen/Meal';
+import MealDescription from './screen/MealDescription';
 
-  let inputChangeHandler = (value) => {
-    setGoal(value)
-  }
-  let addGoalHandler = () => {
-    if (goal && !goalList.includes(goal)) {
-      let newList = [...goalList];
-      newList.push(goal);
-      setList(newList)
-      setGoal('')
-    }
-
-  }
-
-  let deleteGoalHandler = (myGoalToDelete)=>{
-    if(myGoalToDelete){
-      setList(currentList=>{
-        return currentList.filter(goals=>goals!==myGoalToDelete)
-      })
-    }
-  }
-
+let stack = createNativeStackNavigator()
+function App() {
 
   return (
     <>
-    <View style={styles.container}>
-      <GoalInput inputChangeHandler={inputChangeHandler} goal={goal} addGoalHandler={addGoalHandler}/>
-      <GoalList goalList={goalList} deleteGoalHandler={deleteGoalHandler}/>   
-
-    </View>
+    <NavigationContainer>
+      <stack.Navigator  initialRouteName='Home'>
+        <stack.Screen name='Home' component={Category}/>
+        <stack.Screen name='My Meal' component={Meal}/>
+        <stack.Screen name='About My Meal' component={MealDescription}/>
+      </stack.Navigator>
+      
+    </NavigationContainer>
+    
     </>
-  );
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding:10
-  },
+export default App;
 
-});
