@@ -1,19 +1,34 @@
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image } from 'react-native'
 import { MEALS } from '../data/dummy-data';
-import { useLayoutEffect, useMemo } from 'react';
+import { useContext, useLayoutEffect, useMemo } from 'react';
 import { styles } from '../components/MealTile';
+import {Ionicons} from '@expo/vector-icons'
+import { mealContext } from '../context/FavoriteMealProvider';
 
 function MealDescription({ route,navigation }) {
     const { id } = route.params;
+    const mealCtx = useContext(mealContext)
+    let isFavorite = mealCtx.ids.includes(id);
     const myMeal = useMemo(() => {
         return MEALS.find(ele => ele.id == id);
     }, [MEALS, id]);
+
+    let favoriteHandler =()=>{
+        if(isFavorite){
+            mealCtx.removeFavorite(id)
+        }
+        else{
+            mealCtx.addFavorite(id)
+        }
+    }
+
     useLayoutEffect(()=>{
         navigation.setOptions({
-            title:myMeal.title
+            title:myMeal.title,
+            headerRight:({size,color})=><Ionicons onPress={favoriteHandler} name={isFavorite ? "star" : "star-outline"} size={20} color={color}/>
         })
 
-    },[])
+    },[isFavorite,navigation])
     return (<SafeAreaView>
         <ScrollView>
             <Image source={{ uri: myMeal.imageUrl }} style={styles.cardImage} />
