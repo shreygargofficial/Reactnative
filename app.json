@@ -6,10 +6,11 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "backgroundColor":"#cccccc",
+    "backgroundColor":"#ffffff",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
+      "flex":1,
       "backgroundColor": "#ffffff"
     },
     "ios": {
