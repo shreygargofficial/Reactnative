@@ -1,16 +1,39 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, ActivityIndicator, Button, Pressable, FlatList, SafeAreaView, ImageBackground } from 'react-native';
-import {LinearGradient} from 'expo-linear-gradient'
+import { useState ,useContext} from 'react';
+import { StyleSheet, Text, View, Alert, TextInput,  Pressable,ImageBackground,  ImageBack, Pressableground } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient'
+import { login } from '../utilities/http';
+import { authContext } from '../context/AuthContextProvider';
+import Loader from '../components/uiComponents/Loader';
 
-export default function Login(props) {
+export default function Login({ navigation }) {
     const [user, setUser] = useState('')
     const [password, setPassword] = useState('')
-    let clickhandler = () => {
-        if (user == "shrey" && password == "garg") {
-            console.log("loggedON")
-            props.onScreenChange()
-        }
+    const [isSubmitting,setIsSubmitting] = useState(false)
+    const authCtx =  useContext(authContext)
+    let clickhandler = async() => {
+        try{
+            setIsSubmitting(true)
+            let response  = await login(user,password);
+            authCtx.addToken(response.data.idToken,response.data.email);
+            navigation.navigate('Welcome')
+       }
+       catch(e){
+        setIsSubmitting(false)
+            if(e.response){
+                Alert.alert("Invalid Credentials!!",e.response.data.error.message,{
+                    text:'Ok',
+                    style: 'cancel'
+                })
+               
+            }
+            else{
+                Alert.alert("Network Issue!",e.message,{
+                    text:'Ok',
+                    style: 'cancel'
+                })
+            }
+       }
     }
     let usernamehandler = (value) => {
         setUser(value)
@@ -19,40 +42,51 @@ export default function Login(props) {
     let passwordhandler = (value) => {
         setPassword(value)
     }
+    let signupHandler =()=>{
+        navigation.replace('Register')
+    }
+    
     return (
-        <View style={styles.root}>
-            
-               <LinearGradient colors={["red","#fdf3df"]} style={{flex:1}}>
-               <ImageBackground
-                source={require('../assets/Images/bg.jpg')}
-                resizeMode='cover'
-                imageStyle={styles.img}
-                style={styles.imageContainer}>
-                <View style={styles.loginContainerWrapper}>
-                    <View style={styles.loginContainer}>
-                        <Text>Login</Text>
-                        <TextInput
-                            style={styles.textField}
-                            placeholder='Username'
-                            secureTextEntry={false}
-                            onChangeText={usernamehandler}
-                            value={user} />
-                        <TextInput
-                            style={styles.textField}
-                            placeholder='Password'
-                            secureTextEntry={true}
-                            onChangeText={passwordhandler}
-                            value={password} />
+        <>
+        {isSubmitting && <Loader/>}
+        <View style={styles.root}>        
+            <LinearGradient colors={["red", "#fdf3df"]} style={{ flex: 1 }}>        
+                <ImageBackground
+                    source={require('../assets/Images/bg.jpg')}
+                    resizeMode='cover'
+                    imageStyle={styles.img}
+                    style={styles.imageContainer}>
+                    <View style={styles.loginContainerWrapper}>
+                    <Text>{authCtx.token?.substring(0,100)}</Text>
+                        <View style={styles.loginContainer}>
+                            <Text>Login</Text>
+                            <TextInput
+                                style={styles.textField}
+                                placeholder='Email'
+                                inputMode='email'
+                                secureTextEntry={false}
+                                onChangeText={usernamehandler}
+                                value={user} />
+                            <TextInput
+                                style={styles.textField}
+                                placeholder='Password'
+                                secureTextEntry={true}
+                                onChangeText={passwordhandler}
+                                value={password} />
 
-                        <Pressable onPress={clickhandler} style={({pressed})=>pressed ? [styles.btn, styles.opacity] : styles.btn} android_ripple={{ color: '#ccc' }}>
-                            <Text style={styles.btntext}>Login</Text>
+                            <Pressable onPress={clickhandler} style={({ pressed }) => pressed ? [styles.btn, styles.opacity] : styles.btn} android_ripple={{ color: '#ccc' }}>
+                                <Text style={styles.btntext}>Login</Text>
+                            </Pressable>
+                        </View>
+                        <Pressable onPress={signupHandler}>
+                            <Text style={styles.text}>Are you a new user? sign-up</Text>
                         </Pressable>
+
                     </View>
-                    <Text style={styles.text}>Forget Password?</Text>
-                </View>
                 </ImageBackground>
-                </LinearGradient>
+            </LinearGradient>
         </View>
+        </>
     );
 }
 
@@ -62,14 +96,14 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         flex: 1,
-        width:'100%',
+        width: '100%',
         justifyContent: 'center',
-        alignItems:'center',
+        alignItems: 'center',
 
 
     },
-    img:{
-       opacity:0.4
+    img: {
+        opacity: 0.4
     },
     btn: {
         backgroundColor: 'blue',
@@ -78,17 +112,19 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         marginTop: 10
     },
-    opacity:{
-        opacity:0.5
+    opacity: {
+        opacity: 0.5
     },
     loginContainerWrapper: {
         width: '95%',
-        opacity:1
+        alignItems:'center',
+        opacity: 1
     },
 
     loginContainer: {
         backgroundColor: 'rgba(255,255,255,0.9)',
         paddingVertical: 40,
+        width:'100%',
         borderRadius: 15,
         alignItems: 'center',
 
@@ -111,8 +147,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         alignSelf: 'center',
         marginTop: 20,
-        color: '#fff',
-        fontSize: 12,
+        color: 'black',
+        fontWeight:'900',
+        fontSize: 14,
     },
     btntext: {
         color: 'white'

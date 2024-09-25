@@ -1,21 +1,12 @@
+import { useContext } from "react";
 import { SafeAreaView, Text, View,StyleSheet } from "react-native";
+import { authContext } from "../context/AuthContextProvider";
 
 function Main() {
+    const authCtx = useContext(authContext)
     return (<SafeAreaView style={styles.root}>
         <View style={styles.view}>
-            <Text>Shere</Text>
-            <Text>Shere</Text>
-            <Text>Shere</Text>
-            <Text>Shere</Text>
-            <Text>Shere</Text>
-            <Text>Shere</Text>
-            <Text>Shere</Text>
-
-             <Text>Shere</Text>
-             <Text>Shere</Text>
-             <Text>Shere</Text>
-             <Text>Shere</Text>
-             <Text>Shere</Text>
+            <Text>Welcome {authCtx.email}</Text>
         </View>
     </SafeAreaView>);
 }
@@ -27,11 +18,9 @@ let styles = StyleSheet.create({
     root:{
         flex:1,
         alignItems:'center',
-        borderWidth:2,
-        borderColor:'grey'
+        justifyContent:'center'
     },
     view:{
-        flex:1,
     }
 
 })
