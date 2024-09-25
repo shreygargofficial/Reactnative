@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, KeyboardAvoidingView, Platform, TouchableWithoutFeedback,Keyboard } from "react-native";
 import Input from "../../ui/Input";
 import { useState } from "react";
 import CustomButton from "../../ui/CustomButton";
@@ -35,26 +35,26 @@ function ExpenseForm({ isEditing, addHandler, updateHandler, cancelBtnHandler, i
             title: formValue.title.value.trim(),
             date: dateExtractor(formValue.date.value)
         }
-        let amountInvalid = isNaN(finalValues.amount) || finalValues.amount < 0 ? true : false;
+        let amountInvalid = isNaN(finalValues.amount) || finalValues.amount <= 0 ? true : false;
         let dateInvalid = finalValues.date.toString() == 'Invalid Date' ? true : false
         let titleInvalid  = finalValues.title=="" ? true : false
         if (amountInvalid) {
             setFormValue(prev => {
-                let amount = { ...prev[amount] }
+                let amount = { ...prev['amount'] }
                 amount.isValid = false;
                 return { ...prev, amount }
             })
         }
         if (dateInvalid) {
             setFormValue(prev => {
-                let date = { ...prev[date] }
+                let date = { ...prev['date'] }
                 date.isValid = false;
                 return { ...prev, date }
             })
         }
         if (titleInvalid) {
             setFormValue(prev => {
-                let title = { ...prev[title] }
+                let title = { ...prev['title'] }
                 title.isValid = false;
                 return { ...prev, title }
             })
@@ -66,7 +66,12 @@ function ExpenseForm({ isEditing, addHandler, updateHandler, cancelBtnHandler, i
             addHandler.call(this, finalValues);
     }
     return (
-        <View style={styles.formContainer}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView style={styles.formContainer}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={8} // Adjust this based on your needs
+        >
+            
             <Input
                 placeholder={'Amount'}
                 label={'Amount'}
@@ -75,15 +80,6 @@ function ExpenseForm({ isEditing, addHandler, updateHandler, cancelBtnHandler, i
                 value={formValue.amount.value}
             />
             {!formValue.amount.isValid && <Text style={styles.error}>Amount should be a number > 0</Text>}
-            <Input
-                placeholder={'yyyy-mm-dd'}
-                label={'Date'}
-                keyboardType={'default'}
-                maxLength={10}
-                onChangeText={onChangeText.bind(this, 'date')}
-                value={formValue.date.value}
-            />
-             {!formValue.date.isValid && <Text style={styles.error}>Date should be in a correct format</Text>}
             <Input
                 placeholder={'Title'}
                 label={'Add Title'}
@@ -94,6 +90,16 @@ function ExpenseForm({ isEditing, addHandler, updateHandler, cancelBtnHandler, i
                 value={formValue.title.value}
             />
              {!formValue.title.isValid && <Text style={styles.error}>Title should not be empty</Text>}
+            <Input
+                placeholder={'yyyy-mm-dd'}
+                label={'Date'}
+                keyboardType={'default'}
+                maxLength={10}
+                onChangeText={onChangeText.bind(this, 'date')}
+                value={formValue.date.value}
+            />
+             {!formValue.date.isValid && <Text style={styles.error}>Date should be in a correct format</Text>}
+        
             {isEditing && <View style={styles.buttonGroup}>
                 <CustomButton
                     text={'Update'}
@@ -116,7 +122,9 @@ function ExpenseForm({ isEditing, addHandler, updateHandler, cancelBtnHandler, i
                     onPress={onSubmit}
                 />
             }
-        </View>
+            
+        </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
     );
 }
 
@@ -131,7 +139,7 @@ let styles = StyleSheet.create({
     },
     error:{
         color:COLORS.red,
-        
+        marginBottom:6,
         marginHorizontal:30,
     },
     buttonGroup: {
@@ -142,5 +150,6 @@ let styles = StyleSheet.create({
 
     marginRight: {
         marginRight: 10,
+        marginVertical:30
     },
 })
