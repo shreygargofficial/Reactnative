@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, KeyboardAvoidingView, Platform, TouchableWithoutFeedback,Keyboard } from "react-native";
+import { StyleSheet, View, Text, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from "react-native";
 import Input from "../../ui/Input";
 import { useState } from "react";
 import CustomButton from "../../ui/CustomButton";
@@ -37,7 +37,7 @@ function ExpenseForm({ isEditing, addHandler, updateHandler, cancelBtnHandler, i
         }
         let amountInvalid = isNaN(finalValues.amount) || finalValues.amount <= 0 ? true : false;
         let dateInvalid = finalValues.date.toString() == 'Invalid Date' ? true : false
-        let titleInvalid  = finalValues.title=="" ? true : false
+        let titleInvalid = finalValues.title == "" ? true : false
         if (amountInvalid) {
             setFormValue(prev => {
                 let amount = { ...prev['amount'] }
@@ -67,63 +67,63 @@ function ExpenseForm({ isEditing, addHandler, updateHandler, cancelBtnHandler, i
     }
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView style={styles.formContainer}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            keyboardVerticalOffset={8} // Adjust this based on your needs
-        >
-            
-            <Input
-                placeholder={'Amount'}
-                label={'Amount'}
-                keyboardType={'decimal-pad'}
-                onChangeText={onChangeText.bind(this, 'amount')}
-                value={formValue.amount.value}
-            />
-            {!formValue.amount.isValid && <Text style={styles.error}>Amount should be a number > 0</Text>}
-            <Input
-                placeholder={'Title'}
-                label={'Add Title'}
-                keyboardType={'default'}
-                multiline={true}
-                myStyle={styles.title}
-                onChangeText={onChangeText.bind(this, 'title')}
-                value={formValue.title.value}
-            />
-             {!formValue.title.isValid && <Text style={styles.error}>Title should not be empty</Text>}
-            <Input
-                placeholder={'yyyy-mm-dd'}
-                label={'Date'}
-                keyboardType={'default'}
-                maxLength={10}
-                onChangeText={onChangeText.bind(this, 'date')}
-                value={formValue.date.value}
-            />
-             {!formValue.date.isValid && <Text style={styles.error}>Date should be in a correct format</Text>}
-        
-            {isEditing && <View style={styles.buttonGroup}>
-                <CustomButton
-                    text={'Update'}
-                    transparent={false}
-                    rounded={true}
-                    style={styles.marginRight}
-                    onPress={onSubmit}
+            <KeyboardAvoidingView style={styles.formContainer}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                keyboardVerticalOffset={8} // Adjust this based on your needs
+            >
+
+                <Input
+                    placeholder={'Amount'}
+                    label={'Amount'}
+                    keyboardType={'decimal-pad'}
+                    onChangeText={onChangeText.bind(this, 'amount')}
+                    value={formValue.amount.value}
                 />
-                <CustomButton text={'Cancel'}
-                    transparent={true}
-                    onPress={cancelBtnHandler}
-                    rounded={true} />
-            </View>}
-            {
-                !isEditing && <CustomButton
-                    text={'Add'}
-                    transparent={false}
-                    rounded={true}
-                    style={styles.marginRight}
-                    onPress={onSubmit}
+                {!formValue.amount.isValid && <Text style={styles.error}>Amount should be a number > 0</Text>}
+                <Input
+                    placeholder={'Title'}
+                    label={'Add Title'}
+                    keyboardType={'default'}
+                    multiline={true}
+                    myStyle={styles.title}
+                    onChangeText={onChangeText.bind(this, 'title')}
+                    value={formValue.title.value}
                 />
-            }
-            
-        </KeyboardAvoidingView>
+                {!formValue.title.isValid && <Text style={styles.error}>Title should not be empty</Text>}
+                <Input
+                    placeholder={'yyyy-mm-dd'}
+                    label={'Date'}
+                    keyboardType={'default'}
+                    maxLength={10}
+                    onChangeText={onChangeText.bind(this, 'date')}
+                    value={formValue.date.value}
+                />
+                {!formValue.date.isValid && <Text style={styles.error}>Date should be in a correct format</Text>}
+
+                {isEditing && <View style={styles.buttonGroup}>
+                    <CustomButton
+                        text={'Update'}
+                        transparent={false}
+                        rounded={true}
+                        style={styles.marginRight}
+                        onPress={onSubmit}
+                    />
+                    <CustomButton text={'Cancel'}
+                        transparent={true}
+                        onPress={cancelBtnHandler}
+                        rounded={true} />
+                </View>}
+                {
+                    !isEditing && <CustomButton
+                        text={'Add'}
+                        transparent={false}
+                        rounded={true}
+                        style={styles.marginRight}
+                        onPress={onSubmit}
+                    />
+                }
+
+            </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
     );
 }
@@ -137,19 +137,20 @@ let styles = StyleSheet.create({
     title: {
         minHeight: 100,
     },
-    error:{
-        color:COLORS.red,
-        marginBottom:6,
-        marginHorizontal:30,
+    error: {
+        color: COLORS.red,
+        marginBottom: 6,
+        marginHorizontal: 30,
     },
     buttonGroup: {
         flexDirection: 'row',
         justifyContent: 'center',
+        alignItems: 'center',
         marginVertical: 30
     },
 
     marginRight: {
         marginRight: 10,
-        marginVertical:30
+        marginVertical: 30
     },
 })
