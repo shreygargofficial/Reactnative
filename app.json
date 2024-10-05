@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "backgroundColor":"#ffffff",
+    "backgroundColor": "#ffffff",
     "splash": {
       "image": "./assets/Images/bg.jpg",
       "resizeMode": "cover",
@@ -17,12 +17,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/Images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.shreygargofficial.auth"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3f5c3ef4-f816-4d9a-bfc6-414c9c07a4fd"
+      }
     }
   }
 }
